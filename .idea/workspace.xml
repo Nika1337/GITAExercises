@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60fbbf26-3b0a-4ac1-91ad-56bf9a5443dc" name="Changes" comment="seminar 2, group 1">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/lectures/three/group1/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/lectures/three/group1/Node.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/lectures/three/group1/WeightedNode.java" afterDir="false" />
+    <list default="true" id="60fbbf26-3b0a-4ac1-91ad-56bf9a5443dc" name="Changes" comment="seminar 3, group 1">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/lectures/three/group2/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/lectures/three/group2/Node.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/lectures/three/group2/WeightedNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,7 +83,8 @@
       <workItem from="1744611833224" duration="706000" />
       <workItem from="1744728774180" duration="9711000" />
       <workItem from="1744740318677" duration="35000" />
-      <workItem from="1745336267048" duration="8508000" />
+      <workItem from="1745336267048" duration="8618000" />
+      <workItem from="1745424213639" duration="7764000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1744611874340</created>
@@ -99,7 +100,14 @@
       <option name="project" value="LOCAL" />
       <updated>1744740350186</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="seminar 3, group 1">
+      <created>1745345457045</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1745345457045</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -108,6 +116,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="seminar 2, group 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="seminar 2, group 1" />
+    <MESSAGE value="seminar 3, group 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="seminar 3, group 1" />
   </component>
 </project>
