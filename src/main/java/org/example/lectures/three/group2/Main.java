@@ -67,7 +67,7 @@ public class Main {
             curr.neighbours.add(toGraph(currX, currY - 1));
         }
 
-        if ((currY != arrView.length - 1) && !arrView[currX][currY + 1]) {
+        if ((currY != arrView[0].length - 1) && !arrView[currX][currY + 1]) {
             curr.neighbours.add(toGraph(currX, currY + 1));
         }
 
@@ -77,51 +77,60 @@ public class Main {
 
         return curr;
     }
+    private final Map<Node, WeightedNode> map = new HashMap<>();
 
-
-    private HashMap<Node, WeightedNode> map;
-
-    public WeightedNode compress(Node node, Node prevNode, int accWeight) {
-        WeightedNode mappedNode = map.get(node);
-        if (mappedNode != null) {
-            return mappedNode;
-        }
-
-
-
-        Set<Node> nonPrevNeighbours = node.neighbours.stream()
-                .filter(n -> n != prevNode)
-                .collect(Collectors.toSet());
-
-        WeightedNode newNode = new WeightedNode();
-
-        if (nonPrevNeighbours.size() == 0) {
-
-            newNode = new WeightedNode();
-            WeightedNode.Edge newEdge = new WeightedNode.Edge(map.get(prevNode), accWeight);
-            newNode.outgoingEdges.add(newEdge);
-
-        } else if (nonPrevNeighbours.size() == 1) {
-
-            Node neighbour = nonPrevNeighbours.stream().findFirst().get();
-            mappedNode = map.get(neighbour);
-
-            if (mappedNode != null) {
-                newNode = new WeightedNode();
-                WeightedNode.Edge newEdge = new WeightedNode.Edge(map.get(prevNode), accWeight);
-                newNode.outgoingEdges.add(newEdge);
-            } else {
-                return compress(neighbour, node, accWeight + 1);
-            }
-
-        } else {
-
-        }
-
-
-
-        return null;
+    public WeightedNode compress(Node root) {
+        map.clear();
+        return compress(root, null, 0, null);
     }
+
+    private WeightedNode compress(Node node,
+                                  Node          prevNode,
+                                  int           accWeight,
+                                  WeightedNode  prevWeighted) {
+
+        // if it already exists, just connect back to previous
+        WeightedNode existing = map.get(node);
+        if (existing != null) {
+            if (prevWeighted != null)
+                prevWeighted.outgoingEdges.add(
+                        new WeightedNode.Edge(existing, accWeight));
+            return existing;
+        }
+
+        // include only forward neighbours, meaning tha prevnode is ignored
+        Set<Node> next =
+                node.neighbours.stream()
+                        .filter(n -> n != prevNode)
+                        .collect(Collectors.toSet());
+
+        boolean isVertex = node.isFinal
+                || next.size() != 1;
+
+        // we only have one way, corridor
+        if (!isVertex) {
+            Node only = next.iterator().next();
+            return compress(only, node, accWeight + 1, prevWeighted);
+        }
+
+        // branching point, or final node
+        WeightedNode here = new WeightedNode();
+        here.isFinal = node.isFinal;
+        map.put(node, here);
+
+        // connect to previous weighted+
+        if (prevWeighted != null)
+            prevWeighted.outgoingEdges.add(
+                    new WeightedNode.Edge(here, accWeight));
+
+        // start walking on each node from branching point
+        for (Node nb : next)
+            compress(nb, node, 1, here);
+
+        return here;
+    }
+
+
 
 
 }

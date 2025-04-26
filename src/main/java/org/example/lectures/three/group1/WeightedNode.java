@@ -1,11 +1,12 @@
 package org.example.lectures.three.group1;
 
 
-import java.util.List;
+import java.util.Set;
 
 public class WeightedNode {
 
-    List<Edge> edges;
+    Set<Edge> edges;
+    boolean isFinal = false;
     static class Edge {
         WeightedNode node;
         int weight;

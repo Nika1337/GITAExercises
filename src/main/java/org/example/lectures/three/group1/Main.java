@@ -1,9 +1,11 @@
 package org.example.lectures.three.group1;
 
 
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /*
  [
@@ -84,58 +86,66 @@ public class Main {
             toGraph(currX, currY + 1, newNode);
         }
 
+        if (currX == endX && currY == endY) {
+            curr.isFinal = true;
+        }
+
         visited[currX][currY] = true;
     }
 
 
-    public WeightedNode collapse(Node node) {
+    private final Map<Node, WeightedNode> map = new HashMap<>();
 
-
-        WeightedNode result = new WeightedNode();
-
-        collapse(node, null, result, 0);
-
-        return result;
+    public WeightedNode compress(Node root) {
+        map.clear();
+        return compress(root, null, 0, null);
     }
 
-    private void collapse(Node oldCurrNode, Node oldPrevNode, WeightedNode newCurrNode, int accumulatedWeight) {
+    private WeightedNode compress(
+        Node node,
+        Node prevNode,
+        int accWeight,
+        WeightedNode prevWeighted
+    ) {
 
-        List<Node> currNeighbours = oldCurrNode.neighbours;
-
-        if (currNeighbours.size() == 1 && oldPrevNode != null) {
-
-            WeightedNode newNode = new WeightedNode();
-            newNode.edges.add(new WeightedNode.Edge(newCurrNode, accumulatedWeight));
-            newCurrNode.edges.add(new WeightedNode.Edge(newNode, accumulatedWeight));
-
-        } else if (currNeighbours.size() == 2) {
-
-            Node nextElement = null;
-
-            for (Node neighbour : currNeighbours) {
-                if (neighbour != oldPrevNode) {
-                    nextElement = neighbour;
-                    break;
-                }
-            }
-
-            collapse(nextElement, oldCurrNode, newCurrNode, accumulatedWeight + 1);
-        } else {
-
-            for (Node neighbour : currNeighbours) {
-                if (neighbour == oldPrevNode) {
-                    continue;
-                }
-
-                WeightedNode newNode = new WeightedNode();
-                newNode.edges.add(new WeightedNode.Edge(newCurrNode, accumulatedWeight));
-                newCurrNode.edges.add(new WeightedNode.Edge(newNode, accumulatedWeight));
-
-                collapse(neighbour, oldCurrNode, newNode, 0);
-            }
-
+        // if it already exists, just connect back to previous
+        WeightedNode existing = map.get(node);
+        if (existing != null) {
+            if (prevWeighted != null)
+                prevWeighted.edges.add(
+                        new WeightedNode.Edge(existing, accWeight));
+            return existing;
         }
 
+        // include only forward neighbours, meaning tha prevnode is ignored
+        Set<Node> next =
+                node.neighbours.stream()
+                        .filter(n -> n != prevNode)
+                        .collect(Collectors.toSet());
 
+        boolean isVertex = node.isFinal
+                || next.size() != 1;
+
+        // we only have one way, corridor
+        if (!isVertex) {
+            Node only = next.iterator().next();
+            return compress(only, node, accWeight + 1, prevWeighted);
+        }
+
+        // branching point, or final node
+        WeightedNode here = new WeightedNode();
+        here.isFinal = node.isFinal;
+        map.put(node, here);
+
+        // connect to previous weighted+
+        if (prevWeighted != null)
+            prevWeighted.edges.add(
+                    new WeightedNode.Edge(here, accWeight));
+
+        // start walking on each node from branching point
+        for (Node nb : next)
+            compress(nb, node, 1, here);
+
+        return here;
     }
 }
