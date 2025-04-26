@@ -85,9 +85,9 @@ public class Main {
     }
 
     private WeightedNode compress(Node node,
-                                  Node          prevNode,
-                                  int           accWeight,
-                                  WeightedNode  prevWeighted) {
+                                  Node prevNode,
+                                  int accWeight,
+                                  WeightedNode prevWeighted) {
 
         // if it already exists, just connect back to previous
         WeightedNode existing = map.get(node);
@@ -97,6 +97,7 @@ public class Main {
                         new WeightedNode.Edge(existing, accWeight));
             return existing;
         }
+
 
         // include only forward neighbours, meaning tha prevnode is ignored
         Set<Node> next =
@@ -113,7 +114,7 @@ public class Main {
             return compress(only, node, accWeight + 1, prevWeighted);
         }
 
-        // branching point, or final node
+        // branching point, or final node,
         WeightedNode here = new WeightedNode();
         here.isFinal = node.isFinal;
         map.put(node, here);
